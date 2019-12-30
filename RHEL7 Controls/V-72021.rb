@@ -1,0 +1,66 @@
+# encoding: utf-8
+#
+
+exempt_home_users = attribute(
+  'exempt_home_users',
+  description: 'These are `home dir` exempt interactive accounts',
+  value: []
+)
+
+non_interactive_shells = attribute(
+  'non_interactive_shells',
+  description: 'These shells do not allow a user to login',
+  value: ["/sbin/nologin","/sbin/halt","/sbin/shutdown","/bin/false","/bin/sync", "/bin/true"]
+)
+
+control "V-72021" do
+  title "All local interactive user home directories must be group-owned by the
+home directory owners primary group."
+  desc  "If the Group Identifier (GID) of a local interactive user’s home
+directory is not the same as the primary GID of the user, this would allow
+unauthorized access to the user’s files, and users that share the same group
+may not be able to access files that they legitimately should."
+  impact 0.5
+  tag "check": "Verify the assigned home directory of all local interactive
+users is group-owned by that user’s primary GID.
+
+Check the home directory assignment for all local interactive users on the
+system with the following command:
+
+# ls -ld $(egrep ':[0-9]{4}' /etc/passwd | cut -d: -f6)
+
+-rwxr-x--- 1 smithj users 18 Mar 5 17:06 /home/smithj
+
+Check the user's primary group with the following command:
+
+# grep users /etc/group
+
+users:x:250:smithj,jonesj,jacksons
+
+If the user home directory referenced in \"/etc/passwd\" is not group-owned by
+that user’s primary GID, this is a finding.
+"
+  tag "fix": "Change the group owner of a local interactive user’s home
+directory to the group found in \"/etc/passwd\". To change the group owner of a
+local interactive user’s home directory, use the following command:
+
+Note: The example will be for the user \"smithj\", who has a home directory of
+\"/home/smithj\", and has a primary group of users.
+
+# chgrp users /home/smithj"
+
+  ignore_shells = non_interactive_shells.join('|')
+
+  uid_min = login_defs.read_params['UID_MIN'].to_i
+  uid_min = 1000 if uid_min.nil?
+
+  findings = Set[]
+  users.where{ !shell.match(ignore_shells) && (uid >= uid_min || uid == 0)}.entries.each do |user_info|
+    next if exempt_home_users.include?("#{user_info.username}")
+    findings = findings + command("find #{user_info.home} -maxdepth 0 -not -gid #{user_info.gid}").stdout.split("\n")
+  end
+  describe "Home directories that are not group-owned by the user's primary GID" do
+    subject { findings.to_a }
+    it { should be_empty }
+  end
+end

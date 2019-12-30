@@ -1,0 +1,32 @@
+# encoding: utf-8
+#
+control "V-71949" do
+  title "Users must re-authenticate for privilege escalation."
+  desc  "
+    Without re-authentication, users may access resources or perform tasks for
+which they do not have authorization.
+
+    When operating systems provide the capability to escalate a functional
+capability, it is critical the user reauthenticate.
+  "
+  impact 0.5
+  tag "check": "Verify the operating system requires users to reauthenticate
+for privilege escalation.
+
+Check the configuration of the \"/etc/sudoers\" and \"/etc/sudoers.d/*\" files
+with the following command:
+
+# grep -i authenticate /etc/sudoers /etc/sudoers.d/*
+
+If any line is found with a \"!authenticate\" tag, this is a finding."
+  tag "fix": "Configure the operating system to require users to reauthenticate
+for privilege escalation.
+
+Check the configuration of the \"/etc/sudoers\" and \"/etc/sudoers.d/*\" files
+with the following command:
+
+Remove any occurrences of \"!authenticate\" tags in the file."
+  describe command("grep -ir authenticate /etc/sudoers /etc/sudoers.d/*") do
+    its('stdout') { should_not match %r{!authenticate} }
+  end
+end
