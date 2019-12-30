@@ -1,5 +1,5 @@
 # encoding: utf-8
-#
+# If the system does not have a Graphical User Interface installed, this requirement is Not Applicable.
 control "V-71899" do
   title "The operating system must initiate a session lock for the screensaver
 after a period of inactivity for graphical user interfaces."

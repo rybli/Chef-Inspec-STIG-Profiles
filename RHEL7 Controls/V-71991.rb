@@ -1,5 +1,5 @@
 # encoding: utf-8
-#
+# If an HBSS or HIPS is active on the system, this is Not Applicable.
 control "V-71991" do
   title "The operating system must enable the SELinux targeted policy."
   desc  "

@@ -13,11 +13,19 @@ Check the version of the operating system with the following command:
 
 # cat /etc/redhat-release
 
-Red Hat Enterprise Linux Server release 7.2 (Maipo)
+Red Hat Enterprise Linux Server release 7.4 (Maipo)
 
 Current End of Life for RHEL 7.2 is Q4 2020.
 
 Current End of Life for RHEL 7.3 is 30 June 2024.
+
+Current End of Life for RHEL 7.4 is 31 August 2019.
+
+Current End of Life for RHEL 7.5 is 30 April 2020.
+
+Current End of Life for RHEL 7.6 is 31 October 2020.
+
+Current End of Life for RHEL 7.7 is 30 August 2021.
 
 If the release is not supported by the vendor, this is a finding."
   tag "fix": "Upgrade to a supported version of the operating system."
