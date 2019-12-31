@@ -14,33 +14,27 @@ non_interactive_shells = attribute(
 )
 
 control "V-72033" do
-  title "All local initialization files must have mode 0740 or less permissive."
-  desc  "Local initialization files are used to configure the user's shell
-environment upon logon. Malicious modification of these files could compromise
-accounts upon logon."
+  title "The Red Hat Enterprise Linux operating system must be configured so that all local initialization files have mode 0740 or less permissive."
+  desc  "Local initialization files are used to configure the user's shell environment upon logon. Malicious modification of these files could compromise accounts upon logon."
   impact 0.5
-  tag "check": "Verify that all local initialization files have a mode of
-\"0740\" or less permissive.
+  tag "check": "Verify that all local initialization files have a mode of '0740' or less permissive.
 
 Check the mode on all local initialization files with the following command:
 
-Note: The example will be for the smithj user, who has a home directory of
-\"/home/smithj\".
+Note: The example will be for the 'smithj' user, who has a home directory of '/home/smithj'.
 
-# ls -al /home/smithj/.* | more
--rwxr-xr-x  1 smithj users        896 Mar 10  2011 .profile
--rwxr-xr-x  1 smithj users        497 Jan  6  2007 .login
--rwxr-xr-x  1 smithj users        886 Jan  6  2007 .something
+# ls -al /home/smithj/.[^.]* | more
 
-If any local initialization files have a mode more permissive than \"0740\",
-this is a finding."
-  tag "fix": "Set the mode of the local initialization files to \"0740\" with
-the following command:
+-rwxr----- 1 smithj users 896 Mar 10 2011 .profile
+-rwxr----- 1 smithj users 497 Jan 6 2007 .login
+-rwxr----- 1 smithj users 886 Jan 6 2007 .something
 
-Note: The example will be for the smithj user, who has a home directory of
-\"/home/smithj\".
+If any local initialization files have a mode more permissive than "0740", this is a finding."
+  tag "fix": "Set the mode of the local initialization files to "0740" with the following command:
 
-# chmod 0740 /home/smithj/.<INIT_FILE>"
+Note: The example will be for the 'smithj' user, who has a home directory of '/home/smithj'.
+
+# chmod 0740 /home/smithj/.[^.]*"
 
   ignore_shells = non_interactive_shells.join('|')
 

@@ -14,35 +14,37 @@ non_interactive_shells = attribute(
 )
 
 control "V-72029" do
-  title "All local initialization files for interactive users must be owned by
-the home directory user or root."
-  desc  "Local initialization files are used to configure the user's shell
-environment upon logon. Malicious modification of these files could compromise
-accounts upon logon."
+  title "The Red Hat Enterprise Linux operating system must be configured so that all local initialization files for interactive users are owned by the home directory user or root."
+  desc  "Local initialization files are used to configure the user's shell environment upon logon. Malicious modification of these files could compromise accounts upon logon."
   impact 0.5
-  tag "check": "Verify all local initialization files for interactive users are
-owned by the home directory user or root.
+  tag "check": "Verify the local initialization files of all local interactive users are group-owned by that user's primary Group Identifier (GID).
 
-Check the owner on all local initialization files with the following command:
+Check the home directory assignment for all non-privileged users on the system with the following command:
 
-Note: The example will be for the \"smithj\" user, who has a home directory of
-\"/home/smithj\".
+Note: The example will be for the smithj user, who has a home directory of '/home/smithj' and a primary group of 'users'.
 
-# ls -al /home/smithj/.* | more
--rwxr-xr-x  1 smithj users        896 Mar 10  2011 .bash_profile
--rwxr-xr-x  1 smithj users        497 Jan  6  2007 .login
--rwxr-xr-x  1 smithj users        886 Jan  6  2007 .profile
+# cut -d: -f 1,4,6 /etc/passwd | egrep ':[1-4][0-9]{3}'
+smithj:1000:/home/smithj
 
-If any file that sets a local interactive user’s environment variables to
-override the system is not owned by the home directory owner or root, this is a
-finding."
-  tag "fix": "Set the owner of the local initialization files for interactive
-users to either the directory owner or root with the following command:
+# grep 1000 /etc/group
+users:x:1000:smithj,jonesj,jacksons
 
-Note: The example will be for the smithj user, who has a home directory of
-\"/home/smithj\".
+Note: This may miss interactive users that have been assigned a privileged User Identifier (UID). Evidence of interactive use may be obtained from a number of log files containing system logon information.
 
-# chown smithj /home/smithj/.*"
+Check the group owner of all local interactive user's initialization files with the following command:
+
+# ls -al /home/smithj/.[^.]* | more
+
+-rwxr-xr-x 1 smithj users 896 Mar 10 2011 .profile
+-rwxr-xr-x 1 smithj users 497 Jan 6 2007 .login
+-rwxr-xr-x 1 smithj users 886 Jan 6 2007 .something
+
+If all local interactive user's initialization files are not group-owned by that user's primary GID, this is a finding."
+  tag "fix": "Set the owner of the local initialization files for interactive users to either the directory owner or root with the following command:
+
+Note: The example will be for the smithj user, who has a home directory of '/home/smithj'.
+
+# chown smithj /home/smithj/.[^.]*"
 
   ignore_shells = non_interactive_shells.join('|')
 
