@@ -1,42 +1,34 @@
 # encoding: utf-8
 #
 control "V-72201" do
-  title "All uses of the renameat command must be audited."
-  desc  "If the system is not configured to audit certain activities and write
-them to an audit log, it is more difficult to detect and track system
-compromises and damages incurred during a system compromise."
+  title "The Red Hat Enterprise Linux operating system must audit all uses of the renameat syscall."
+  desc  "If the system is not configured to audit certain activities and write them to an audit log, it is more difficult to detect and track system compromises and damages incurred during a system compromise."
   impact 0.5
-  tag "check": "Verify the operating system generates audit records when
-successful/unsuccessful attempts to use the \"renameat\" command occur.
+  tag "check": "Verify the operating system generates audit records when successful/unsuccessful attempts to use the 'renameat' syscall occur.
 
-Check the file system rules in \"/etc/audit/audit.rules\" with the following
-commands:
-
-Note: The output lines of the command are duplicated to cover both 32-bit and
-64-bit architectures. Only the lines appropriate for the system architecture
-must be present.
+Check the file system rules in '/etc/audit/audit.rules' with the following commands:
 
 # grep -iw renameat /etc/audit/audit.rules
 
--a always,exit -F arch=b32 -S renameat -F perm=x -F auid>=1000 -F auid!=4294967295 -k delete
+-a always,exit -F arch=b32 -S renameat -F auid>=1000 -F auid!=4294967295 -k delete
 
--a always,exit -F arch=b64 -S renameat -F perm=x -F auid>=1000 -F auid!=4294967295 -k delete
+-a always,exit -F arch=b64 -S renameat -F auid>=1000 -F auid!=4294967295 -k delete
 
-If there are no audit rules defined for the \"renameat\" command, this is a
-finding."
-  tag "fix": "Configure the operating system to generate audit records when
-successful/unsuccessful attempts to use the \"renameat\" command occur.
+If both the 'b32' and 'b64' audit rules are not defined for the 'renameat' syscall, this is a finding."
+  tag "fix": "Configure the operating system to generate audit records when successful/unsuccessful attempts to use the 'renameat' syscall occur.
 
-Add the following rules in \"/etc/audit/rules.d/audit.rules\":
+Add the following rules in '/etc/audit/rules.d/audit.rules':
 
-Note: The rules are duplicated to cover both 32-bit and 64-bit architectures.
-Only the lines appropriate for the system architecture must be configured.
+-a always,exit -F arch=b32 -S renameat -F auid>=1000 -F auid!=4294967295 -k delete
 
--a always,exit -F arch=b32 -S renameat -F perm=x -F auid>=1000 -F auid!=4294967295 -k delete
-
--a always,exit -F arch=b64 -S renameat -F perm=x -F auid>=1000 -F auid!=4294967295 -k delete
+-a always,exit -F arch=b64 -S renameat -F auid>=1000 -F auid!=4294967295 -k delete
 
 The audit daemon must be restarted for the changes to take effect."
+
+describe auditd do
+  its('lines') { should include %r(-a always,exit -F arch=b32 -S renameat -F auid>=1000 -F auid!=4294967295 -k delete) }
+  its('lines') { should include %r(-a always,exit -F arch=b64 -S renameat -F auid>=1000 -F auid!=4294967295 -k delete) }
+end
 
   describe auditd.syscall("renameat").where {arch == "b32"} do
     its('action.uniq') { should eq ['always'] }
