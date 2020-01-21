@@ -21,48 +21,69 @@ the authoritative time server (e.g., mobile, teleworking, and tactical
 endpoints).
   "
   impact 0.5
-  tag "check": "Check to see if NTP is running in continuous mode.
+  tag "check": "Check to see if NTP is running in continuous mode:
 
 # ps -ef | grep ntp
 
-If NTP is not running, this is a finding.
+If NTP is not running, check to see if 'chronyd' is running in continuous mode:
 
-If the process is found, then check the \"ntp.conf\" file for the \"maxpoll\"
-option setting:
+# ps -ef | grep chronyd
+
+If NTP or 'chronyd' is not running, this is a finding.
+
+If the NTP process is found, then check the 'ntp.conf' file for the 'maxpoll' option setting:
 
 # grep maxpoll /etc/ntp.conf
 
-maxpoll 17
+server 0.rhel.pool.ntp.org iburst maxpoll 10
 
-If the option is set to \"17\" or is not set, this is a finding.
+If the option is set to "17" or is not set, this is a finding.
 
-If the file does not exist, check the \"/etc/cron.daily\" subdirectory for a
-crontab file controlling the execution of the \"ntpdate\" command.
+If the file does not exist, check the ''/etc/cron.daily' subdirectory for a crontab file controlling the execution of the 'ntpd -q' command.
 
-# grep –l ntpdate /etc/cron.daily
-
+# grep -i 'ntpd -q' /etc/cron.daily/*
 # ls -al /etc/cron.* | grep ntp
+
 ntp
 
-If a crontab file does not exist in the \"/etc/cron.daily\" that executes the
-\"ntpdate\" file, this is a finding."
-  tag "fix": "Edit the \"/etc/ntp.conf\" file and add or update an entry to
-define \"maxpoll\" to \"10\" as follows:
+If a crontab file does not exist in the '/etc/cron.daily' that executes the 'ntpd -q' command, this is a finding.
 
-maxpoll 10
+If the 'chronyd' process is found, then check the 'chrony.conf' file for the 'maxpoll' option setting:
 
-If NTP was running and \"maxpoll\" was updated, the NTP service must be
-restarted:
+# grep maxpoll /etc/chrony.conf
+
+server 0.rhel.pool.ntp.org iburst maxpoll 10
+
+If the option is not set or the line is commented out, this is a finding."
+  tag "fix": "Edit the '/etc/ntp.conf' or '/etc/chrony.conf' file and add or update an entry to define 'maxpoll' to '10' as follows:
+
+server 0.rhel.pool.ntp.org iburst maxpoll 10
+
+If NTP was running and 'maxpoll' was updated, the NTP service must be restarted:
 
 # systemctl restart ntpd
 
 If NTP was not running, it must be started:
 
-# systemctl start ntpd"
+# systemctl start ntpd
 
-  describe service('ntpd') do
-    it { should be_running }
+If 'chronyd' was running and 'maxpoll' was updated, the service must be restarted:
+
+# systemctl restart chronyd.service
+
+If 'chronyd' was not running, it must be started:
+
+# systemctl start chronyd.service"
+
+
+  describe.one do
+    describe service('ntpd') do
+      it { should be_running }
+    end
+    describe service('chronyd') do
+      it { should be_running}
   end
+
 
   describe.one do
     describe command('ntpd --saveconfigquit=/dev/stdout | grep -E "^server\s"') do
@@ -72,6 +93,9 @@ If NTP was not running, it must be started:
     # Case where maxpoll empty
     describe file('/etc/cron.daily/ntpdate') do
       it { should exist }
+    end
+    describe command('grep maxpoll /etc/chrony.conf') do
+      its('stdout') { should eq 'server 0.rhel.pool.ntp.org iburst maxpoll 10' }
     end
   end
 end

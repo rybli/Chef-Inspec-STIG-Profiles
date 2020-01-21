@@ -52,7 +52,7 @@ command:
             full accredidation for production."
     end
   else
-    describe command("rpm -Va | grep '^.M' | awk 'NF>1{print $NF}'").stdout.strip.split("\n") do
+    describe command("for i in $(rpm -Va | egrep -i '^\.[M|U|G|.]{8}' | cut -d ' ' -f4,5);do for j in $(rpm -qf $i);do rpm -ql $j --dump | cut -d ' ' -f1,5,6,7 | grep $i;done;done").stdout.strip.split("\n") do
       it { should all(be_in rpm_verify_perms_except) }
     end
   end

@@ -61,7 +61,7 @@ command:
     end
   else
     # grep excludes files that are marked with 'c' attribute (config files)
-    describe command("rpm -Va --noconfig | grep '^..5' | grep -E -v '[a-z]*c[a-z]*\\s+\\S+$' | awk 'NF>1{print $NF}'").
+    describe command("rpm -Va --noconfig | grep '^..5'").
       stdout.strip.split("\n") do
         it { should all(be_in rpm_verify_integrity_except) }
       end
