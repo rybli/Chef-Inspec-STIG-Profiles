@@ -4,7 +4,7 @@ control "V-92731" do
 	title "The Apache web server must be protected from being stopped by a non-privileged user."
 	desc "An attacker has at least two reasons to stop a web server. The first is to cause a denial of service (DoS), and the second is to put in place changes the attacker made to the web server configuration.
 
-To prohibit an attacker from stopping the Apache web server, the process ID (pid) of the web server and the utilities used to start/stop it must be protected from access by non-privileged users. By knowing the "pid" and having access to the Apache web server utilities, a non-privileged user has a greater capability of stopping the server, whether intentionally or unintentionally.false"
+To prohibit an attacker from stopping the Apache web server, the process ID (pid) of the web server and the utilities used to start/stop it must be protected from access by non-privileged users. By knowing the 'pid' and having access to the Apache web server utilities, a non-privileged user has a greater capability of stopping the server, whether intentionally or unintentionally.false"
 	impact 0.5
 	tag "check": "Review the web server documentation and deployed configuration to determine where the process ID is stored and which utilities are used to start/stop the web server.
 
