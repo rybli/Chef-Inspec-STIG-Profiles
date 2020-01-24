@@ -1,0 +1,11 @@
+name: RHEL7
+title: RHEL7 STIG
+maintainer: BAH
+copyright: Booz Allen Hamilton
+copyright_email: blitch_ryan2@bah.com
+license: Proprietary, All rights reserved
+summary: Verify that RHEL7 servers are configured securely
+version: 1.0.0
+supports:
+        - platform-family: redhat
+inspec_version: "~>4.18.51" 
