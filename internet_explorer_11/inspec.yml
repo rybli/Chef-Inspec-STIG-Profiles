@@ -1,0 +1,6 @@
+name: ie11_stig
+title: InSpec Profile
+maintainer: Ryan Blitch
+license: CC0 1.0 Universal
+summary: An InSpec Compliance Profile Internet Explorer 11
+version: 0.1.18
