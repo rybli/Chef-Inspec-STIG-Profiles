@@ -1,0 +1,6 @@
+name: Windows_Firewall_stig
+title: InSpec Profile
+maintainer: Ryan Blitch
+license: CC0 1.0 Universal
+summary: An InSpec Compliance Profile for Windows Firewall
+version: 0.1.7
