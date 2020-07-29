@@ -46,7 +46,7 @@ must be "2688".  If the "SecureProtocols" DWORD value is not "2688", this is a f
 # START_DESCRIBE V-64729
   
   describe registry_key('HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings') do
-    its('SecureProtocols') { should eq '2688' }
+    its('SecureProtocols') { should eq 2688 }
   end
 
 # STOP_DESCRIBE V-64729

@@ -40,7 +40,7 @@ control 'V-46789' do
 
 # START_DESCRIBE V-46789
     describe registry_key('HKLM\Software\Policies\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_WINDOW_RESTRICTIONS') do
-      its('explorer.exe') { should eq 1 }
+      its(['explorer.exe']) { should eq '1' }
     end
 
 # STOP_DESCRIBE V-46789

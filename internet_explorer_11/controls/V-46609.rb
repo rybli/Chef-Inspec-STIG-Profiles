@@ -24,7 +24,7 @@ control 'V-46609' do
         hive: 'HKLM',
         key:  'Software\Policies\Microsoft\Internet Explorer\Control Panel',
       }) do
-        it ('History') { should eq 1 }
+        its('History') { should eq 1 }
       end
 
       describe registry_key({

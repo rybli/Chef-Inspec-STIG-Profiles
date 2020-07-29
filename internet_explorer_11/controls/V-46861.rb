@@ -24,7 +24,7 @@ control 'V-46861' do
         hive: 'HKLM',
         key:  'Software\Policies\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_SECURITYBAND',
       }) do
-       its('explorer.exe') { should eq 1 }
+       its(['explorer.exe']) { should eq '1' }
       end
 
 # STOP_DESCRIBE V-46861

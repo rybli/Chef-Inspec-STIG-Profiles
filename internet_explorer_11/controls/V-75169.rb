@@ -40,7 +40,7 @@ otherwise not applicable.'
 # START_DESCRIBE V-75169
   
    describe registry_key('HKLM\Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3') do
-        its('140C') { should eq '3' }
+        its('140C') { should eq 3 }
    end
 
 # STOP_DESCRIBE V-75169

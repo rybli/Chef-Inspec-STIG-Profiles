@@ -34,7 +34,7 @@ If the value "RunThisTimeEnabled" is REG_DWORD = 0, this is not a finding.'
 # START_DESCRIBE V-72757
   
     describe registry_key('HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Ext ') do
-        its('RunThisTimeEnabled') { should cmp 0 }
+        its('RunThisTimeEnabled') { should eq 0 }
     end
 
 # STOP_DESCRIBE V-72757

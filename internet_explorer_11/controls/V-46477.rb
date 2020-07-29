@@ -40,8 +40,9 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\WinTrust\Trust Providers\Software
 If the value "State" is "REG_DWORD = 23C00", this is not a finding.'
 
 # START_DESCRIBE V-46477
-      describe registry_key('HKCU\Software\Microsoft\Windows\CurrentVersion\WinTrust\Trust Providers\Software Publishing Criteria') do
-      its('State') { should eq '23c00' }
+# TODO This check is not working for some reason. Tested against correct setting and only sees 'nil'
+    describe registry_key('HKCU\Software\Microsoft\Windows\CurrentVersion\WinTrust\Trust Providers\Software Publishing Criteria') do
+      its('State') { should eq 146432 } # 23C00 is equal to 146432.
     end
 
 # STOP_DESCRIBE V-46477

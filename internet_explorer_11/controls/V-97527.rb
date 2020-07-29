@@ -37,7 +37,7 @@ If the value "Disabled" is REG_DWORD = 1, this is not a finding.'
 # START_DESCRIBE V-97527
   
     describe registry_key('HKEY_LOCAL_Machine\SOFTWARE\Policies\Microsoft\Internet Explorer\IEDevTools') do
-        its('Disabled') { should eq '1' }
+        its('Disabled') { should eq 1 }
     end
 
 # STOP_DESCRIBE V-97527

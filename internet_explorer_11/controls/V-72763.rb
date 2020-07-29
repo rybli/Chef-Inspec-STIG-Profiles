@@ -45,7 +45,7 @@ If the value "120c" is REG_DWORD = “3”, this is not a finding.'
 # START_DESCRIBE V-72763
   
     describe registry_key('HKLM\Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\4') do
-        its('120c') { should eq '3' }
+        its('120c') { should eq 3 }
     end
 
 # STOP_DESCRIBE V-72763

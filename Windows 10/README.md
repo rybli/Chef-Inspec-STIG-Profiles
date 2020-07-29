@@ -1,5 +1,3 @@
-This is an update to the Mitre Inspec Baseline profile. Updated to reflect June 17, 2020 STIG content.
-
 # microsoft-windows-10-stig-baseline
 
 InSpec profile to validate the secure configuration of Microsoft Windows 10, against DISA's Microsoft Windows 10 Security Technical Implementation Guide (STIG) Version 1, Release 20.

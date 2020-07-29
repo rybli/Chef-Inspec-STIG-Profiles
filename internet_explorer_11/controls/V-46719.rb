@@ -24,7 +24,7 @@ control 'V-46719' do
         hive: 'HKLM',
         key:  'Software\Policies\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_MIME_SNIFFING',
       }) do
-        its('iexplore.exe') { should eq 1 }
+        its(['iexplore.exe']) { should eq '1' }
       end
 
 # STOP_DESCRIBE V-46719

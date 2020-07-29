@@ -38,7 +38,7 @@ Criteria: If the value for "SecureProtocols" is not REG_DWORD = "2560", this is 
 
 # START_DESCRIBE V-46473
   describe registry_key('HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings') do
-    its('SecureProtocols') { should eq '2560' }
+    its('SecureProtocols') { should eq 2560 }
   end
 
 # STOP_DESCRIBE V-46473
